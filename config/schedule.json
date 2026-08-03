@@ -1,0 +1,54 @@
+{
+  "schedule_version": "0.1.0",
+  "zones": [
+    {
+      "zone_id": "zone_a",
+      "zone_name": "생산라인 A",
+      "waypoints": [
+        {"waypoint_id": "a_1", "x": 1.2, "y": 0.5, "yaw": 0.0},
+        {"waypoint_id": "a_2", "x": 2.4, "y": 0.5, "yaw": 1.57}
+      ]
+    },
+    {
+      "zone_id": "zone_b",
+      "zone_name": "자재창고 B",
+      "waypoints": [
+        {"waypoint_id": "b_1", "x": -1.0, "y": 3.0, "yaw": 3.14}
+      ]
+    }
+  ],
+  "time_blocks": [
+    {
+      "block_id": "commute",
+      "block_name": "출근 시간대",
+      "start_time": "08:00",
+      "end_time": "09:00",
+      "patrol_order": ["zone_a", "zone_b"],
+      "base_priority": 1
+    },
+    {
+      "block_id": "operation",
+      "block_name": "가동 시간대",
+      "start_time": "09:00",
+      "end_time": "12:00",
+      "patrol_order": ["zone_a", "zone_a", "zone_b"],
+      "base_priority": 3
+    },
+    {
+      "block_id": "lunch",
+      "block_name": "점심 시간대",
+      "start_time": "12:00",
+      "end_time": "13:00",
+      "patrol_order": ["zone_b"],
+      "base_priority": 1
+    },
+    {
+      "block_id": "night",
+      "block_name": "야간 시간대",
+      "start_time": "18:00",
+      "end_time": "08:00",
+      "patrol_order": ["zone_a", "zone_b"],
+      "base_priority": 2
+    }
+  ]
+}
