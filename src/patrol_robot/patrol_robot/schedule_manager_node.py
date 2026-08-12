@@ -105,13 +105,22 @@ class ScheduleManagerNode(Node):
 
     def _get_current_time_block(self) -> dict | None:
         """
-        알려진 한계: night처럼 end_time < start_time(자정 넘김)인 블록은
-        아직 처리 못 함. (Day3부터 이어지는 이슈, 별도로 고칠 예정)
+        night처럼 end_time < start_time(자정 넘김)인 블록도 처리.
+        예: night(18:00~08:00) → 현재 시각이 18:00 이후이거나
+        08:00 이전이면 이 블록에 속하는 것으로 판단.
         """
         now_str = datetime.now().strftime("%H:%M")
         for block in self.schedule["time_blocks"]:
-            if block["start_time"] <= now_str < block["end_time"]:
-                return block
+            start = block["start_time"]
+            end = block["end_time"]
+            if start <= end:
+                # 일반적인 경우 (예: 09:00~16:00)
+                if start <= now_str < end:
+                    return block
+            else:
+                # 자정을 넘는 경우 (예: 18:00~08:00)
+                if now_str >= start or now_str < end:
+                    return block
         return None
 
     def _waypoint_to_pose(self, x: float, y: float, yaw: float) -> PoseStamped:
